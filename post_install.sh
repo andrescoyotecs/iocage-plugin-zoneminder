@@ -20,7 +20,8 @@ service mysql-server start 2>/dev/null
 
 # Database Setup
 USER="dbadmin"
-DB="ZMDB"
+# Bug in the sql script there is a default use which i cant fix without breaking other things
+DB="zm"
 
 # Save the config values
 echo "$DB" > /root/dbname
