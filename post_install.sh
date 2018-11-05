@@ -53,7 +53,7 @@ sed -i '' "s|ZM_DB_PASS=zmpass|ZM_DB_PASS=${PASS}|g" /usr/local/etc/zm.conf
 
 #Import Database
 
-mysql -u ${USER} -p ${PASS} ${DB} < /usr/local/share/zoneminder/db/zm_create.sql
+mysql -u ${USER} -p${PASS} ${DB} < /usr/local/share/zoneminder/db/zm_create.sql
 
 echo "Database User: $USER"
 echo "Database Password: $PASS"
