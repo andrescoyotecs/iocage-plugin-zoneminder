@@ -44,3 +44,16 @@ GRANT ALL PRIVILEGES ON ${DB}.* TO '${USER}'@'localhost';
 FLUSH PRIVILEGES;
 EOF
 
+#Setup Database
+sed -i '' "s|ZM_DB_NAME=zm|ZM_DB_NAME=${DB}|g" /usr/local/etc/zm.conf
+sed -i '' "s|iZM_DB_USER=zmuser|ZM_DB_USER=${USER}|g" /usr/local/etc/zm.conf
+sed -i '' "s|ZM_DB_PASS=zmpass|ZM_DB_PASS=${PASS}|g" /usr/local/etc/zm.conf
+
+
+#Import Database
+
+mysql -u ${USER} ${PASS} -p ${DB} < /usr/local/share/zoneminder/db/zm_create.sql
+
+echo "Database User: $USER"
+echo "Database Password: $PASS"
+echo "Database Name: $DB"
