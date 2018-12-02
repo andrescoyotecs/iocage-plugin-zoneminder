@@ -56,6 +56,14 @@ sed -i '' "s|ZM_DB_PASS=zmpass|ZM_DB_PASS=${PASS}|g" /usr/local/etc/zm.conf
 
 mysql -u ${USER} -p${PASS} ${DB} < /usr/local/share/zoneminder/db/zm_create.sql
 
+
+# restart the service after everything have been setup.
+service mysql-server restart 2>/dev/null
+service fcgiwrap restart 2>/dev/null 
+service php-fpm restart 2>/dev/null
+service nginx restart 2>/dev/null
+
+
 echo "Database User: $USER"
 echo "Database Password: $PASS"
 echo "Database Name: $DB"
