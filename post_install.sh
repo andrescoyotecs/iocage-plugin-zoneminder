@@ -6,6 +6,7 @@ sysrc -f /etc/rc.conf mysql_enable="YES"
 #Enable fcgi_wrapper for nginx
 sysrc -f /etc/rc.conf fcgiwrap_enable="YES"
 sysrc -f /etc/rc.conf fcgiwrap_user="www"
+sysrc -f /etc/rc.conf fcgiwrap_socket_owner="www" 
 sysrc -f /etc/rc.conf fcgiwrap_flags="-c 4"
 #Enable PHP
 sysrc -f /etc/rc.conf php_fpm_enable="YES"
