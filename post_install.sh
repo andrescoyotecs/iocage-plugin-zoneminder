@@ -52,19 +52,24 @@ sed -i '' "s|ZM_DB_NAME=zm|ZM_DB_NAME=${DB}|g" /usr/local/etc/zm.conf
 sed -i '' "s|ZM_DB_USER=zmuser|ZM_DB_USER=${USER}|g" /usr/local/etc/zm.conf
 sed -i '' "s|ZM_DB_PASS=zmpass|ZM_DB_PASS=${PASS}|g" /usr/local/etc/zm.conf
 
-
 #Import Database
-
 mysql -u ${USER} -p${PASS} ${DB} < /usr/local/share/zoneminder/db/zm_create.sql
 
+# Create Zoneminder data directories 
+su -m www -c 'mkdir /var/db/zoneminder/events'
+su -m www -c 'mkdir /var/db/zoneminder/images'
 
-# restart the service after everything have been setup.
+# Restart the services after everything has been setup
 service mysql-server restart 2>/dev/null
 service fcgiwrap restart 2>/dev/null 
 service php-fpm restart 2>/dev/null
 service nginx restart 2>/dev/null
 
+# Start Zoneminder service after everything has been setup
+service zoneminder start 2>/dev/null
 
+# Output the relevant database details
 echo "Database User: $USER"
 echo "Database Password: $PASS"
 echo "Database Name: $DB"
+
