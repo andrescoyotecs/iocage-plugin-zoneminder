@@ -34,8 +34,16 @@ PASS=`cat /root/dbpassword`
 echo "Database User: $USER"
 echo "Database Password: $PASS"
 
+if [ -e "/root/.mysql_secret" ] ; then
+   # Mysql > 57 sets a default PW on root
+   SQLCMD="mysql -u root -p$(cat /root/.mysql_secret)"
+else
+   # Mysql <= 56 does not
+   SQLCMD="mysql -u root"
+fi
+
 # Configure mysql
-mysql -u root <<-EOF
+${SQLCMD} <<-EOF
 UPDATE mysql.user SET Password=PASSWORD('${PASS}') WHERE User='root';
 DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
 DELETE FROM mysql.user WHERE User='';
