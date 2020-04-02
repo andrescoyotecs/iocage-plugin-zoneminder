@@ -37,14 +37,10 @@ echo "Database Password: $PASS"
 if [ -e "/root/.mysql_secret" ] ; then
    # Mysql > 57 sets a default PW on root
    TMPPW=$(cat /root/.mysql_secret | grep -v "^#")
-   SQLCMD="mysql -u root -p\"${TMPPW}\""
-else
-   # Mysql <= 56 does not
-   SQLCMD="mysql -u root"
-fi
+   echo "SQL Temp Password: $TMPPW"
 
 # Configure mysql
-${SQLCMD} <<-EOF
+mysql -u root -p"$TMPPW" <<-EOF
 UPDATE mysql.user SET Password=PASSWORD('${PASS}') WHERE User='root';
 DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
 DELETE FROM mysql.user WHERE User='';
@@ -55,6 +51,23 @@ GRANT ALL PRIVILEGES ON *.* TO '${USER}'@'localhost' WITH GRANT OPTION;
 GRANT ALL PRIVILEGES ON ${DB}.* TO '${USER}'@'localhost';
 FLUSH PRIVILEGES;
 EOF
+
+else
+   # Mysql <= 56 does not
+
+# Configure mysql
+mysql -u root <<-EOF
+UPDATE mysql.user SET Password=PASSWORD('${PASS}') WHERE User='root';
+DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
+DELETE FROM mysql.user WHERE User='';
+DELETE FROM mysql.db WHERE Db='test' OR Db='test_%';
+CREATE USER '${USER}'@'localhost' IDENTIFIED BY '${PASS}';
+CREATE DATABASE ${DB} CHARACTER SET utf8;
+GRANT ALL PRIVILEGES ON *.* TO '${USER}'@'localhost' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON ${DB}.* TO '${USER}'@'localhost';
+FLUSH PRIVILEGES;
+EOF
+fi
 
 #Setup Database
 sed -i '' "s|ZM_DB_NAME=zm|ZM_DB_NAME=${DB}|g" /usr/local/etc/zm.conf
