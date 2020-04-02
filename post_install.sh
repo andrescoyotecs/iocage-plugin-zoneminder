@@ -36,7 +36,8 @@ echo "Database Password: $PASS"
 
 if [ -e "/root/.mysql_secret" ] ; then
    # Mysql > 57 sets a default PW on root
-   SQLCMD="mysql -u root -p$(cat /root/.mysql_secret)"
+   TMPPW=$(cat /root/.mysql_secret | grep -v "^#")
+   SQLCMD="mysql -u root -p\"${TMPPW}\""
 else
    # Mysql <= 56 does not
    SQLCMD="mysql -u root"
