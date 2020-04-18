@@ -1,8 +1,0 @@
-#!/bin/sh
-echo "NOP"
-
-# Reconfigures nginx zoneminder config file then restarts nginx
-# Settings used: httpport, httpsport, sslcert, sslkey, ssloption
-# Settings adminport and adminprotocol are only used in ui.json
-
-
