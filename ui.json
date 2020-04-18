@@ -3,4 +3,5 @@
     "adminportal_placeholders": {
 	"protocol": "adminprotocol",
 	"port": "adminport",
+    }
 }
