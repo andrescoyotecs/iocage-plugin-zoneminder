@@ -74,9 +74,9 @@ fi
 # zm.conf should not be edited. Instead, create a zm-freenas.conf under
 # zoneminder directory. This should make it survice plugin updates, too.
 touch /usr/local/etc/zoneminder/zm-freenas.conf
-cat "ZM_DB_NAME=${DB}" >> /usr/local/etc/zoneminder/zm-freenas.conf
-cat "ZM_DB_USER=${USER}" >> /usr/local/etc/zoneminder/zm-freenas.conf
-cat "ZM_DB_PASS=${PASS}" >> /usr/local/etc/zoneminder/zm-freenas.conf
+echo "ZM_DB_NAME=${DB}" >> /usr/local/etc/zoneminder/zm-freenas.conf
+echo "ZM_DB_USER=${USER}" >> /usr/local/etc/zoneminder/zm-freenas.conf
+echo "ZM_DB_PASS=${PASS}" >> /usr/local/etc/zoneminder/zm-freenas.conf
 
 #Import Database
 mysql -u ${USER} -p${PASS} ${DB} < /usr/local/share/zoneminder/db/zm_create.sql
