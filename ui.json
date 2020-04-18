@@ -1,3 +1,6 @@
 {
-	"adminportal": "http://%%IP%%/zm"
+    "adminportal": "protocol://%%IP%%:port/zm"
+    "adminportal_placeholders": {
+	"protocol": "adminprotocol",
+	"port": "adminport",
 }

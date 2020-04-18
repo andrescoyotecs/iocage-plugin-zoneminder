@@ -13,6 +13,14 @@ sysrc -f /etc/rc.conf php_fpm_enable="YES"
 #Enable ZoneMinder
 sysrc -f /etc/rc.conf zoneminder_enable="YES"
 
+# Generate self-signed certificate to allow secure connections from the very beginning
+# User should configure their own certificate and key using plugin options
+if [ ! -d "/usr/local/etc/ssl" ]; then
+    mkdir -p /usr/local/etc/ssl
+fi
+/usr/bin/openssl req -new -newkey rsa:2048 -days 366 -nodes -x509 -subj "/O=Temporary Certificate Please Replace/CN=*" \
+		 -keyout /usr/local/etc/ssl/key.pem -out /usr/local/etc/ssl/cert.pem
+
 # Start the service
 service nginx start 2>/dev/null
 service php-fpm start 2>/dev/null
