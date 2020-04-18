@@ -12,11 +12,13 @@ sslkey=/usr/local/bin/pluginrcget.sh sslkey
 ssloption=/usr/local/bin/pluginrcget.sh ssloption
 
 # Remove prior config
-sed -E -i '' -e '/listen/Id; /ssl_certificate/Id;' /usr/local/etc/zoneminder/zm-freenas.conf
+sed -E -i '' -e '/listen/Id; /ssl_certificate/Id;' \
+    /usr/local/etc/nginx/conf.d/zoneminder.conf
 
 if [ "$ssloption" = "tlsdisable" -o "$ssloption" = "tlsallow" ]; then
     sed -E -i '' -e "/server/Ia \
-    listen $httpport;" /usr/local/etc/zoneminder/zm-freenas.conf
+    listen $httpport;" \
+        /usr/local/etc/nginx/conf.d/zoneminder.conf
 fi
 
 if [ "$ssloption" = "tlsrequire" -o "$ssloption" = "tlsallow" ]; then
@@ -24,7 +26,8 @@ if [ "$ssloption" = "tlsrequire" -o "$ssloption" = "tlsallow" ]; then
         sed -E -i '' -e "/server/Ia \
     listen $httpsport ssl;
     ssl_certificate $sslcert;
-    ssl_certificate_key $sslkey;" /usr/local/etc/zoneminder/zm-freenas.conf
+    ssl_certificate_key $sslkey;" \
+            /usr/local/etc/nginx/conf.d/zoneminder.conf
 
     else
         echo "Incorrect settings: SSL requested but no certificate or key files present"
