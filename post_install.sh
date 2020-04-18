@@ -1,4 +1,4 @@
-
+set -x
 #Enable nginx
 sysrc -f /etc/rc.conf nginx_enable="YES"
 #Enable MySQL
