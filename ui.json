@@ -3,5 +3,6 @@
     "adminportal_placeholders": {
 	"%%S%%": "adminprotocol",
 	"%%P%%": "adminport"
-    }
+    },
+    "docurl": "https://github.com/RafalLukawiecki/iocage-plugin-zoneminder"
 }

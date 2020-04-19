@@ -25,17 +25,17 @@ case $1 in
             /usr/local/etc/nginx/conf.d/zoneminder.conf | tail -n 1
         ;;
     adminprotocol)
-        if [ "$(pluginget httpsport)" -a -e "$(pluginget sslcert)" -a -e "$(pluginget sslkey)" ]; then
+        if [ "$(pluginget.sh httpsport)" -a -e "$(pluginget.sh sslcert)" -a -e "$(pluginget.sh sslkey)" ]; then
             echo "https"
         else
             echo "http"
         fi
         ;;
     adminport)
-        if [ "$(pluginget httpsport)" -a -e "$(pluginget sslcert)" -a -e "$(pluginget sslkey)" ]; then
-            pluginget httpsport
+        if [ "$(pluginget.sh httpsport)" -a -e "$(pluginget.sh sslcert)" -a -e "$(pluginget.sh sslkey)" ]; then
+            pluginget.sh httpsport
         else
-            pluginget httpport
+            pluginget.sh httpport
         fi
         ;;
     *)
