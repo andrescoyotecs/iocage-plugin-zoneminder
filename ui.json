@@ -1,4 +1,4 @@
 {
     "adminportal": "https://%%IP%%/zm",
-    "docurl": "https://github.com/RafalLukawiecki/iocage-plugin-zoneminder"
+    "docurl": "https://github.com/freenas/iocage-plugin-zoneminder"
 }
