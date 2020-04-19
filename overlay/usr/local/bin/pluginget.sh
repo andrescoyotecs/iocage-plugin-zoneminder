@@ -6,29 +6,29 @@ logger -t pluginget "Reading $1"
 case $1 in
     httpport)
         # If multiple non-SSL ports are configured, return the first one only
-        sed -En -e '/listen/Is/listen[[:blank:]]*([[:digit:]]+)[[:blank:]]*;/\1/Ip;' \
+        sed -En -e '/listen/Is/.*listen[[:blank:]]*([[:digit:]]+)[[:blank:]]*;.*/\1/Ip;' \
             /usr/local/etc/nginx/conf.d/zoneminder.conf | head -n 1
         ;;
     httpsport)
         # If multiple SSL ports are configured, return the first one only
-        sed -En -e '/listen/Is/listen[[:blank:]]*([[:digit:]]+)[[:blank:]]*ssl[[:blank:]]*;/\1/Ip;' \
+        sed -En -e '/listen/Is/.*listen[[:blank:]]*([[:digit:]]+)[[:blank:]]*ssl[[:blank:]]*;.*/\1/Ip;' \
             /usr/local/etc/nginx/conf.d/zoneminder.conf | head -n 1
         ;;
     sslcert)
         # If multiple certificates have been set, return the last one
-        sed -En -e '/ssl_certificate/Is/ssl_certificate[[:blank:]]*([^; ]+)[[:blank:]]*;/\1/Ip;' \
+        sed -En -e '/ssl_certificate/Is/.*ssl_certificate[[:blank:]]*([^; ]+)[[:blank:]]*;.*/\1/Ip;' \
             /usr/local/etc/nginx/conf.d/zoneminder.conf | tail -n 1
         ;;
     sslkey)
         # If multiple private key files have been set, return the last one
-        sed -En -e '/ssl_certificate_key/Is/ssl_certificate_key[[:blank:]]*([^; ]+)[[:blank:]]*;/\1/Ip;' \
+        sed -En -e '/ssl_certificate_key/Is/.*ssl_certificate_key[[:blank:]]*([^; ]+)[[:blank:]]*;.*/\1/Ip;' \
             /usr/local/etc/nginx/conf.d/zoneminder.conf | tail -n 1
         ;;
     adminprotocol)
         if [ "$(pluginget.sh httpsport)" -a -e "$(pluginget.sh sslcert)" -a -e "$(pluginget.sh sslkey)" ]; then
-            printf "https"
+            echo "https"
         else
-            printf "http"
+            echo "http"
         fi
         ;;
     adminport)
@@ -38,11 +38,11 @@ case $1 in
 	# https://github.com/iocage/iocage/issues/1163
         if [ "$(pluginget.sh httpsport)" -a -e "$(pluginget.sh sslcert)" -a -e "$(pluginget.sh sslkey)" ]; then
             if [ ! "$(pluginget.sh httpsport)" = "443" ]; then
-                printf ":$(pluginget.sh httpsport)"
+                echo ":$(pluginget.sh httpsport)"
             fi
         else
             if [ ! "$(pluginget.sh httpport)" = "80" ]; then
-                printf ":$(pluginget.sh httpport)"
+                echo ":$(pluginget.sh httpport)"
             fi
         fi
         ;;
