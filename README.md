@@ -33,7 +33,8 @@ Assuming your plugin jail is called "zoneminder" you can set them by calling
 something along the lines of:
 
 ```
-iocage set -P httpport 8349 zoneminder
+iocage set -P httpport=8349 zoneminder
+iocage set -P sslcert=/usr/local/etc/ssl/mycert.pem zoneminder
 ```
 ### Admin UI issue
 
