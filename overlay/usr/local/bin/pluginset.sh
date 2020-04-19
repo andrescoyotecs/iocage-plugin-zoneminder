@@ -1,5 +1,4 @@
 #!/bin/sh
-logger -t pluginset "Setting $1 to $2"
 
 # Set configuration settings directly to the config files.
 

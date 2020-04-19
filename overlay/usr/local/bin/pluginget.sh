@@ -1,5 +1,4 @@
 #!/bin/sh
-logger -t pluginget "Reading $1"
 
 # Get configuration settings directly from config files, some recursively.
 

@@ -1,4 +1,5 @@
-set -x
+#!/bin/sh
+
 #Enable nginx
 sysrc -f /etc/rc.conf nginx_enable="YES"
 #Enable MySQL
@@ -106,4 +107,3 @@ service zoneminder start 2>/dev/null
 echo "Database User: $USER" > /root/PLUGIN_INFO
 echo "Database Password: $PASS" >> /root/PLUGIN_INFO
 echo "Database Name: $DB" >> /root/PLUGIN_INFO
-
