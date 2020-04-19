@@ -5,26 +5,24 @@ logger -t pluginget "Reading $1"
 
 case $1 in
     httpport)
-	# If multiple non-SSL ports are configured, return the first one only
-	# xargs and printf used to ensure no newline at the end, which would
-	# otherwise confuse iocage's adminportal placeholder substitutions
+        # If multiple non-SSL ports are configured, return the first one only
         sed -En -e '/listen/Is/listen[[:blank:]]*([[:digit:]]+)[[:blank:]]*;/\1/Ip;' \
-            /usr/local/etc/nginx/conf.d/zoneminder.conf | head -n 1 | xargs -0 printf "%s"
+            /usr/local/etc/nginx/conf.d/zoneminder.conf | head -n 1
         ;;
     httpsport)
-	# If multiple SSL ports are configured, return the first one only
+        # If multiple SSL ports are configured, return the first one only
         sed -En -e '/listen/Is/listen[[:blank:]]*([[:digit:]]+)[[:blank:]]*ssl[[:blank:]]*;/\1/Ip;' \
-            /usr/local/etc/nginx/conf.d/zoneminder.conf | head -n 1 | xargs -0 printf "%s"
+            /usr/local/etc/nginx/conf.d/zoneminder.conf | head -n 1
         ;;
     sslcert)
-	# If multiple certificates have been set, return the last one
+        # If multiple certificates have been set, return the last one
         sed -En -e '/ssl_certificate/Is/ssl_certificate[[:blank:]]*([^; ]+)[[:blank:]]*;/\1/Ip;' \
-            /usr/local/etc/nginx/conf.d/zoneminder.conf | tail -n 1 | xargs -0 printf "%s"
+            /usr/local/etc/nginx/conf.d/zoneminder.conf | tail -n 1
         ;;
     sslkey)
-	# If multiple private key files have been set, return the last one
+        # If multiple private key files have been set, return the last one
         sed -En -e '/ssl_certificate_key/Is/ssl_certificate_key[[:blank:]]*([^; ]+)[[:blank:]]*;/\1/Ip;' \
-            /usr/local/etc/nginx/conf.d/zoneminder.conf | tail -n 1 | xargs -0 printf "%s"
+            /usr/local/etc/nginx/conf.d/zoneminder.conf | tail -n 1
         ;;
     adminprotocol)
         if [ "$(pluginget.sh httpsport)" -a -e "$(pluginget.sh sslcert)" -a -e "$(pluginget.sh sslkey)" ]; then
@@ -34,10 +32,18 @@ case $1 in
         fi
         ;;
     adminport)
+	# Return :port_number only if the port is non-default, ie. not 80 or 443 for the
+	# respective protocol (http or https)
+	# Please note, using printf to avoid adding a newline as per iocage 1.2 bug, see
+	# https://github.com/iocage/iocage/issues/1163
         if [ "$(pluginget.sh httpsport)" -a -e "$(pluginget.sh sslcert)" -a -e "$(pluginget.sh sslkey)" ]; then
-            printf "$(pluginget.sh httpsport)"
+            if [ ! "$(pluginget.sh httpsport)" = "443" ]; then
+                printf ":$(pluginget.sh httpsport)"
+            fi
         else
-            printf "$(pluginget.sh httpport)"
+            if [ ! "$(pluginget.sh httpport)" = "80" ]; then
+                printf ":$(pluginget.sh httpport)"
+            fi
         fi
         ;;
     *)

@@ -1,5 +1,5 @@
 {
-    "adminportal": "%%S%%://%%IP%%:%%P%%/zm",
+    "adminportal": "%%S%%://%%IP%%%%P%%/zm",
     "adminportal_placeholders": {
 	"%%S%%": "adminprotocol",
 	"%%P%%": "adminport"
