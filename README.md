@@ -15,6 +15,7 @@ All the configurable settings are configured in settings.json. They are:
 - `httpsport`
 - `sslcert`
 - `sslkey`
+
 Assuming your plugin jail is called "zoneminder" you can set them by calling something along the lines of:
 ```
 iocage set -P httpport 8349 zoneminder
