@@ -22,21 +22,23 @@
 	"adminprotocol": {
 	    "type": "combo",
 	    "name": "Admin UI Protocol",
-	    "description": "Default protocol for accessing admin UI.",
+	    "description": "Protocol for accessing admin UI. Value depends on SSL settings.",
 	    "requirerestart": false,
 	    "default": "https",
 	    "options": {
 		"https": "https",
 		"http": "http"
-	    }
+	    },
+	    "readonly": true
 	},
 	"adminport": {
 	    "type": "int",
 	    "name": "Admin UI Port",
-	    "description": "Default port for accessing admin UI. Must match either your http or https port and the selected admin UI protocol.",
+	    "description": "Default port for accessing admin UI. Value depends on SSL and port settings.",
 	    "requirerestart": false,
 	    "default": "443",
-            "range": "1-65535"
+            "range": "1-65535",
+	    "readonly": true
 	},
         "sslcert": {
             "type": "string",
