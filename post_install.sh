@@ -1,3 +1,4 @@
+#!/bin/sh
 
 #Enable nginx
 sysrc -f /etc/rc.conf nginx_enable="YES"
@@ -12,6 +13,14 @@ sysrc -f /etc/rc.conf fcgiwrap_flags="-c 4"
 sysrc -f /etc/rc.conf php_fpm_enable="YES"
 #Enable ZoneMinder
 sysrc -f /etc/rc.conf zoneminder_enable="YES"
+
+# Generate self-signed certificate to allow secure connections from the very beginning
+# User should configure their own certificate and key using plugin options
+if [ ! -d "/usr/local/etc/ssl" ]; then
+    mkdir -p /usr/local/etc/ssl
+fi
+/usr/bin/openssl req -new -newkey rsa:2048 -days 366 -nodes -x509 -subj "/O=Temporary Certificate Please Replace/CN=*" \
+		 -keyout /usr/local/etc/ssl/key.pem -out /usr/local/etc/ssl/cert.pem
 
 # Start the service
 service nginx start 2>/dev/null
@@ -71,9 +80,12 @@ EOF
 fi
 
 #Setup Database
-sed -i '' "s|ZM_DB_NAME=zm|ZM_DB_NAME=${DB}|g" /usr/local/etc/zm.conf
-sed -i '' "s|ZM_DB_USER=zmuser|ZM_DB_USER=${USER}|g" /usr/local/etc/zm.conf
-sed -i '' "s|ZM_DB_PASS=zmpass|ZM_DB_PASS=${PASS}|g" /usr/local/etc/zm.conf
+# zm.conf should not be edited. Instead, create a zm-freenas.conf under
+# zoneminder directory. This should make it survice plugin updates, too.
+touch /usr/local/etc/zoneminder/zm-freenas.conf
+echo "ZM_DB_NAME=${DB}" >> /usr/local/etc/zoneminder/zm-freenas.conf
+echo "ZM_DB_USER=${USER}" >> /usr/local/etc/zoneminder/zm-freenas.conf
+echo "ZM_DB_PASS=${PASS}" >> /usr/local/etc/zoneminder/zm-freenas.conf
 
 #Import Database
 mysql -u ${USER} -p${PASS} ${DB} < /usr/local/share/zoneminder/db/zm_create.sql
@@ -95,4 +107,3 @@ service zoneminder start 2>/dev/null
 echo "Database User: $USER" > /root/PLUGIN_INFO
 echo "Database Password: $PASS" >> /root/PLUGIN_INFO
 echo "Database Name: $DB" >> /root/PLUGIN_INFO
-
