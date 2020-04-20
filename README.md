@@ -44,7 +44,7 @@ match the other one. Once the key and certificate match each other all is good.
 A way to avoid that would be for iocage not to call the `servicerestart` command
 when setting multiple values, but it does not do that at present. Another way would
 be to only make one of the two settings require a restart, but that would be
-error-prone in other way.
+error-prone in other ways.
 
 ### Admin UI issue
 
