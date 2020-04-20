@@ -50,6 +50,6 @@ possible to replace the ui.json with this to make it work automatically:
 	"%%S%%": "adminprotocol",
 	"%%P%%": "adminport"
     },
-    "docurl": "https://github.com/RafalLukawiecki/iocage-plugin-zoneminder"
+    "docurl": "https://github.com/freenas/iocage-plugin-zoneminder"
 }
 ```
