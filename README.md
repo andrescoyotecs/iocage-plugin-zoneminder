@@ -36,12 +36,23 @@ something along the lines of:
 iocage set -P httpport=8349 zoneminder
 iocage set -P sslcert=/usr/local/etc/ssl/mycert.pem zoneminder
 ```
+
+Bear in mind if you are setting the value of sslcert and sslkey you _will_ get
+an error once you have set the first parameter but before the second one. This
+error, which you can ignore, simply states that the just-changed file does not
+match the other one. Once the key and certificate match each other all is good.
+A way to avoid that would be for iocage not to call the `servicerestart` command
+when setting multiple values, but it does not do that at present. Another way would
+be to only make one of the two settings require a restart, but that would be
+error-prone in other way.
+
 ### Admin UI issue
 
 Please note that the Manage admin UI defaults to HTTPS on the default port (443)
-because of a bug in iocage (see ) that prevents the adminportal URL from being
+because of a bug in iocage (see https://github.com/iocage/iocage/issues/1163)
+that prevents the adminportal URL from being
 formed correctly using custom values. Once that bug has been fixed it will be
-possible to replace the ui.json with this to make it work automatically:
+possible to replace the ui.json with the below one to make it work automatically:
 
 ```
 {
