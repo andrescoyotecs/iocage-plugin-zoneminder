@@ -22,7 +22,7 @@ renewal tool like ACME LetsEncrypt. This way there is no need for the plugin to
 have to manage its certificate renewal and you will achieve a reasonable level of
 network security.
 
-### Settings
+## Settings
 All the configurable settings are configured in settings.json. They are:
 - `httpport`
 - `httpsport`
@@ -46,7 +46,7 @@ when setting multiple values, but it does not do that at present. Another way wo
 be to only make one of the two settings require a restart, but that would be
 error-prone in other ways.
 
-### Admin UI issue
+## Admin UI issue
 
 Please note that the Manage admin UI defaults to HTTPS on the default port (443)
 because of a bug in iocage (see https://github.com/iocage/iocage/issues/1163)
@@ -64,3 +64,51 @@ possible to replace the ui.json with the below one to make it work automatically
     "docurl": "https://github.com/freenas/iocage-plugin-zoneminder"
 }
 ```
+
+## Configuring Zoneminder To Work With More Cameras (Montage View)
+
+By default the montage view will only work with something like 4 cameras at a time.
+This is because of the limits placed on the configuration of the software.  More
+processes are needed in order for the software to work, so it would be adviseable
+to enter into the jail and make changes to the following files, with the following
+advice:
+
+Edit:
+
+`/etc/rc.conf`
+
+And increase fcgiwrap_flags -c 4 to something that matches your configuration.  IIRC
+one is needed per camera stream.  Please make sure to note that this may have an
+impact on local resources.  
+
+All major browsers (because they all use the same engines now) limit the number of
+connections to each server, so you need to also enable a setting in zone minder called
+multiport, that was added to zoneminder recently.  Before you do so you MUST add more
+ports to the nginx config.
+
+Edit:
+
+`/usr/local/etc/nginx/conf.d/zoneminder.conf`
+
+And add an additional listen directive, for the additional ports that zoneminder can use.
+Since nginx can take multiple ports per directive you could add something like this:
+
+`listen 30000-30025;`
+
+Right under:
+
+`listen 80;`
+
+You must then go to the zoneminder GUI config, and edit MIN_STREAMING_PORT and set it at
+the starting port (in this example):  30000
+
+At some point, the author that wrote these montage instructions, also edited this file:
+
+`/usr/local/etc/php-fpm.d/zoneminder.conf`
+
+And modified pm.max_childern to be:
+
+`pm.max_childern = 50`
+
+The author does not know if this matters, and did not have time to look up the setting, and
+test the config mod.  Sorry.
