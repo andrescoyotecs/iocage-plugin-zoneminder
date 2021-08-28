@@ -100,6 +100,9 @@ service fcgiwrap restart 2>/dev/null
 service php-fpm restart 2>/dev/null
 service nginx restart 2>/dev/null
 
+#install libxml
+pkg install -y p5-xml-libxml-simple-0.95
+
 # Start Zoneminder service after everything has been setup
 service zoneminder start 2>/dev/null
 
